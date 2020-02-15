@@ -20,7 +20,9 @@
   v-on:my_caption="my_caption = $event"
   v-bind:post_info="post_info" 
   v-bind:step="step" 
-  v-bind:image_url="image_url"/>
+  v-bind:image_url="image_url"
+  v-bind:clicked_filter="clicked_filter"
+  v-bind:insta_fileter="insta_fileter" />
 
 <div v-if="step == 0" class="footer">
   <ul class="footer-button-plus">
@@ -35,7 +37,7 @@
 <script>
 import Body from './components/Body.vue'
 import user from './assets/data.js'
-
+import EventBus from './EventBus.js'
 export default {
   name: 'App',
   components: {
@@ -46,8 +48,20 @@ export default {
       step:0,
       post_info: user,
       image_url: "",
-      my_caption: ""
+      my_caption: "",
+      clicked_filter: "",
+      insta_fileter: [ "normal", "clarendon", "gingham", "moon", "lark", 
+                        "reyes", "juno", "slumber", "aden", "perpetua", 
+                        "mayfair", "rise", "hudson", "valencia", "xpro2", 
+                        "willow", "lofi", "inkwell", "nashville"]
     }
+  },
+  mounted(){
+    EventBus.$on('filter', (filter) => {
+    this.clicked_filter = filter
+    /* eslint-disable */
+    console.log(filter)
+    });
   },
   methods: {
     upload(e){
@@ -64,8 +78,6 @@ export default {
         this.image_url = e.target.result
         this.step =1
       }
-     
-
     },
     publish(){
       // 1. this.step == 0
@@ -78,7 +90,7 @@ export default {
         date: 'May 15',
         liked: false,
         caption: this.my_caption,
-        filter: "perpetua"
+        filter: this.clicked_filter
       }
 
       this.post_info.unshift(my_post);

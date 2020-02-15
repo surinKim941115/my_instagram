@@ -6,21 +6,23 @@
 </div>
 
 <div v-if="step == 1">
-<div class="upload-image" :style="'background-image:url('+image_url+')'"></div>
+<div :class="'upload-image '+clicked_filter" :style="'background-image:url('+image_url+')'"></div>
   <div class="filters">
-    <div class="filter-1"></div>
-    <div class="filter-1"></div>
-    <div class="filter-1"></div>
-    <div class="filter-1"></div>
-    <div class="filter-1"></div>
+    <FilterBox 
+      v-for="(filter, i) in insta_fileter" :key="i" 
+      v-bind:image_url="image_url" 
+      v-bind:filter="filter">
+      <p>{{filter}}</p>
+    </FilterBox>
   </div>
 </div>
 
 <!-- <button v-on:click="$emit('money',50000)">버튼</button> -->
 
 <div v-if="step == 2">
-  <div class="upload-image" :style="'background-image:url('+image_url+')'"></div>
+  <div :class="'upload-image '+clicked_filter" :style="'background-image:url('+image_url+')'"></div>
   <div class="write">
+    <!-- 자식에서 부모까지 데이터 보내주는 -->
     <textarea v-on:input="$emit('my_caption', $event.target.value)" class="write-box">write!</textarea>
   </div>
 
@@ -30,16 +32,18 @@
 
 <script>
 import Post from './Post.vue'
-
+import FilterBox from './FilterBox.vue'
 export default {
   name: 'body',
   components: {
-    Post,
+    Post, FilterBox,
   },
   props:{
       post_info: Object,
       step: Number,
       image_url: String,
+      insta_fileter: Array,
+      clicked_filter: String,
   }
 }
 
